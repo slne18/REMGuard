@@ -7,6 +7,8 @@ read from disk and are not changed by a request.
 from __future__ import annotations
 
 import json
+import threading
+import uuid
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -27,6 +29,9 @@ app = FastAPI(title="REMGuard")
 STATIC = Path(__file__).resolve().parent / "static"
 _model = None
 _reference = None
+_jobs: dict[str, dict] = {}
+_jobs_lock = threading.Lock()
+_score_lock = threading.Lock()
 
 
 def get_model():
@@ -78,21 +83,24 @@ async def score(
     if not data:
         raise HTTPException(status_code=400, detail="The uploaded file is empty.")
     score_text = await _score_text(scores)
-    with TemporaryDirectory() as temp:
-        path = Path(temp) / "night.edf"
-        path.write_bytes(data)
-        try:
-            expert = None
-            if score_text is not None:
-                header = read_edf_header(path)
-                expert = parse_expert_scores(score_text, header.start_time)
-            prepared = preprocess_recording(path)
-            scored = score_recording(prepared, get_model())
-        except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-        except Exception as exc:
-            raise HTTPException(status_code=400, detail=f"The EDF could not be scored: {exc}") from exc
-    return _payload(name, scored, expert)
+    job_id = uuid.uuid4().hex
+    with _jobs_lock:
+        _jobs[job_id] = {"status": "running"}
+    threading.Thread(target=_score_job, args=(job_id, name, data, score_text), daemon=True).start()
+    return {"status": "running", "job_id": job_id}
+
+
+@app.get("/jobs/{job_id}")
+def job_status(job_id: str) -> dict:
+    with _jobs_lock:
+        job = _jobs.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="That score is no longer available.")
+    if job["status"] == "error":
+        raise HTTPException(status_code=400, detail=job["detail"])
+    if job["status"] == "running":
+        return {"status": "running", "job_id": job_id}
+    return job["result"]
 
 
 @app.post("/score/example")
@@ -107,6 +115,29 @@ def score_example() -> dict:
 @app.get("/")
 def index() -> FileResponse:
     return FileResponse(STATIC / "index.html")
+
+
+def _score_job(job_id: str, name: str, data: bytes, score_text: str | None) -> None:
+    try:
+        with _score_lock:
+            with TemporaryDirectory() as temp:
+                path = Path(temp) / "night.edf"
+                path.write_bytes(data)
+                expert = None
+                if score_text is not None:
+                    header = read_edf_header(path)
+                    expert = parse_expert_scores(score_text, header.start_time)
+                prepared = preprocess_recording(path)
+                scored = score_recording(prepared, get_model())
+                result = _payload(name, scored, expert)
+        with _jobs_lock:
+            _jobs[job_id] = {"status": "done", "result": result}
+    except ValueError as exc:
+        with _jobs_lock:
+            _jobs[job_id] = {"status": "error", "detail": str(exc)}
+    except Exception as exc:
+        with _jobs_lock:
+            _jobs[job_id] = {"status": "error", "detail": f"The EDF could not be scored: {exc}"}
 
 
 async def _score_text(scores: UploadFile | None) -> str | None:

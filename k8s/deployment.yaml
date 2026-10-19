@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: remguard
-          image: remguard:local
+          image: remguard:share
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           readinessProbe:

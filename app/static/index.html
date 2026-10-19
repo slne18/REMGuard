@@ -146,9 +146,15 @@
       status.textContent = message;
       result.classList.remove("visible");
       try {
-        const response = await fetch(url, options);
-        const payload = await response.json();
+        let response = await fetch(url, options);
+        let payload = await response.json();
         if (!response.ok) throw new Error(payload.detail || "The night could not be scored.");
+        while (payload.status === "running") {
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          response = await fetch(`/jobs/${payload.job_id}`);
+          payload = await response.json();
+          if (!response.ok) throw new Error(payload.detail || "The night could not be scored.");
+        }
         render(payload);
         status.textContent = "";
       } catch (error) {
