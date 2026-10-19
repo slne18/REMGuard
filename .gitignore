@@ -1,0 +1,17 @@
+# Raw CAP Sleep Database recordings. Do not commit.
+data/raw/
+*.edf
+*.edf.st
+
+# ISRUC nights kept for a later test. Large, and not part of the CAP set.
+data/test_REMGuard/
+
+# Filtered copies of those recordings. Large, regenerated from the EDFs.
+data/preprocess/
+
+.venv/
+.cache/
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store

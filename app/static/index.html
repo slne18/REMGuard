@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>REMGuard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e7e5e4;
+      --paper: #fafaf9;
+      --card: #ffffff;
+      --rem: #1e3a5f;
+      --quiet: #a8a29e;
+      --flag: #9a3412;
+      --ok: #3f6212;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 40px 20px 64px; }
+    h1 { font-size: 32px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.02em; }
+    h2 { font-size: 15px; font-weight: 600; margin: 0 0 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+    p { line-height: 1.5; }
+    .lede { max-width: 62ch; color: var(--muted); margin-top: 0; }
+    form, .result { background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+    form { padding: 20px; display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+    .picker { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--muted); }
+    .score-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    input[type="file"] { font-family: inherit; max-width: 100%; }
+    button {
+      font-family: inherit;
+      background: var(--rem);
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+    button.text { background: transparent; color: var(--muted); border: 0; padding: 0; font-size: 14px; text-decoration: underline; }
+    button:disabled { opacity: 0.5; cursor: wait; }
+    .status { color: var(--muted); min-height: 1.4em; }
+    .result { margin-top: 20px; padding: 20px; display: none; }
+    .result.visible { display: block; }
+    .headline { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+    .score { font-size: 56px; line-height: 1; margin: 0; }
+    .score span { font-size: 22px; color: var(--muted); }
+    .flag { border-radius: 999px; padding: 8px 12px; font-size: 14px; }
+    .flag.on { background: #ffedd5; color: var(--flag); }
+    .flag.off { background: #ecfccb; color: var(--ok); }
+    .charts { display: grid; gap: 22px; margin-top: 22px; }
+    svg { width: 100%; height: auto; display: block; }
+    .caption { color: var(--muted); font-size: 14px; margin: 6px 0 0; }
+    .swatch { display: inline-block; width: 12px; height: 12px; margin: 0 4px 0 10px; vertical-align: -1px; }
+    .swatch.model { background: var(--rem); margin-left: 0; }
+    .swatch.expert { background: #b45309; }
+    .note { margin: 22px 0 0; padding: 0; color: var(--muted); font-size: 14px; }
+    .error { color: var(--flag); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>REMGuard</h1>
+    <p class="lede">Upload one EDF with EEG, EOG, and chin EMG. The file is prepared in two steps, in the same way as the nights the model was trained on. First each signal is filtered: EEG keeps 0.3–35 Hz, EOG keeps 0.3–10 Hz, and chin EMG keeps frequencies from 10 Hz upward. Then, when the recording is faster than those bands need, EEG and EOG are resampled to 100 Hz and chin EMG to 256 Hz.</p>
+    <p class="lede">REM is detected from the brain and eye signals. The share of detected REM during which the chin stays above its own threshold is compared with the healthy control nights in the PhysioNet CAP Sleep Database.</p>
+    <form id="form">
+      <label class="picker">Recording
+        <input id="file" type="file" accept=".edf" aria-label="EDF recording">
+      </label>
+      <div class="picker">
+        <span>Expert scores, optional</span>
+        <div class="score-row">
+          <input id="scores" type="file" accept=".txt" aria-label="Expert stage scores">
+          <button id="clear-scores" class="text" type="button" hidden>Remove</button>
+        </div>
+      </div>
+      <button type="submit">Score the night</button>
+    </form>
+    <p id="status" class="status"></p>
+    <section id="result" class="result" aria-live="polite">
+      <div class="headline">
+        <div>
+          <h2>Chin above its own threshold</h2>
+          <p id="score" class="score"></p>
+        </div>
+        <div id="flag" class="flag"></div>
+      </div>
+      <p id="summary"></p>
+      <div class="charts">
+        <div>
+          <h2>Where this night sits</h2>
+          <svg id="distribution" viewBox="0 0 640 160" role="img"></svg>
+          <p class="caption">Each tick is one healthy control night from the PhysioNet CAP Sleep Database. The mark is this upload. The line is the 90th percentile of those nights.</p>
+        </div>
+        <div>
+          <h2 id="strip-title">Detected REM</h2>
+          <svg id="strip" viewBox="0 0 640 80" role="img"></svg>
+          <p id="strip-caption" class="caption">Dark blocks are the 30-second epochs called REM.</p>
+          <p id="compare" class="caption" hidden></p>
+        </div>
+        <div>
+          <h2>Chin during one REM stretch</h2>
+          <svg id="chin" viewBox="0 0 640 180" role="img"></svg>
+          <p class="caption">The horizontal lines are this night's own threshold, twice the quiet level from the epochs called non-REM.</p>
+        </div>
+      </div>
+      <p class="note">A flag means this night's chin stayed elevated during detected REM more often than 90 percent of the healthy control nights in the PhysioNet CAP Sleep Database.</p>
+    </section>
+  </main>
+  <script>
+    const form = document.getElementById("form");
+    const fileInput = document.getElementById("file");
+    const scoresInput = document.getElementById("scores");
+    const clearScores = document.getElementById("clear-scores");
+    const status = document.getElementById("status");
+    const result = document.getElementById("result");
+
+    scoresInput.addEventListener("change", () => {
+      clearScores.hidden = scoresInput.files.length === 0;
+    });
+    clearScores.addEventListener("click", () => {
+      scoresInput.value = "";
+      clearScores.hidden = true;
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!fileInput.files.length) {
+        status.textContent = "Choose an EDF file first.";
+        return;
+      }
+      const body = new FormData();
+      body.append("recording", fileInput.files[0]);
+      if (scoresInput.files.length) body.append("scores", scoresInput.files[0]);
+      await submit("/score", { method: "POST", body }, "Filtering the EDF with MNE, then detecting REM. A full recording can take a few minutes.");
+    });
+
+    async function submit(url, options, message) {
+      setBusy(true);
+      status.textContent = message;
+      result.classList.remove("visible");
+      try {
+        const response = await fetch(url, options);
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.detail || "The night could not be scored.");
+        render(payload);
+        status.textContent = "";
+      } catch (error) {
+        status.innerHTML = `<span class="error">${error.message}</span>`;
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function setBusy(busy) {
+      for (const button of form.querySelectorAll("button")) button.disabled = busy;
+    }
+
+    function render(payload) {
+      const score = document.getElementById("score");
+      const flag = document.getElementById("flag");
+      const summary = document.getElementById("summary");
+      if (payload.elevated_percent === null) {
+        score.innerHTML = "No REM";
+        flag.className = "flag off";
+        flag.textContent = "Nothing to compare";
+        summary.textContent = `The model called ${payload.rem_minutes} minutes of REM across ${payload.duration_sec / 3600} hours.`;
+      } else {
+        score.innerHTML = `${payload.elevated_percent.toFixed(1)}<span>%</span>`;
+        flag.className = payload.flagged ? "flag on" : "flag off";
+        flag.textContent = payload.flagged ? "Above the healthy line" : "Within the healthy range";
+        summary.textContent = `${payload.rem_minutes} minutes were called REM. The chin crossed ${payload.threshold_uv} µV for ${payload.elevated_percent.toFixed(1)}% of that time. The 90th percentile of the healthy control nights in the PhysioNet CAP Sleep Database is ${payload.healthy_p90}%. The chin stayed elevated for more of that REM than in ${payload.rank}% of those healthy control nights.`;
+      }
+      drawDistribution(payload);
+      drawStrip(payload);
+      drawChin(payload);
+      result.classList.add("visible");
+    }
+
+    function drawDistribution(payload) {
+      const svg = document.getElementById("distribution");
+      const values = payload.healthy_elevated_percent.slice();
+      const mark = payload.elevated_percent;
+      const top = Math.max(payload.healthy_p90, mark || 0, ...values) * 1.15 || 1;
+      const x = (value) => 36 + (value / top) * 580;
+      const ticks = values.map((value) => `<line x1="${x(value)}" y1="78" x2="${x(value)}" y2="108" stroke="#a8a29e" stroke-width="2"/>`).join("");
+      const night = mark === null ? "" : `<circle cx="${x(mark)}" cy="93" r="7" fill="#1e3a5f"/>`;
+      const line = x(payload.healthy_p90);
+      svg.innerHTML = `
+        <line x1="36" y1="93" x2="620" y2="93" stroke="#e7e5e4"/>
+        ${ticks}
+        <line x1="${line}" y1="48" x2="${line}" y2="124" stroke="#9a3412" stroke-dasharray="4 3"/>
+        <text x="${line}" y="36" text-anchor="middle" font-size="12" fill="#9a3412">90%</text>
+        ${night}
+        <text x="36" y="148" font-size="12" fill="#57534e">0%</text>
+        <text x="616" y="148" text-anchor="end" font-size="12" fill="#57534e">${top.toFixed(0)}%</text>`;
+    }
+
+    function drawStrip(payload) {
+      const svg = document.getElementById("strip");
+      const title = document.getElementById("strip-title");
+      const caption = document.getElementById("strip-caption");
+      const compare = document.getElementById("compare");
+      const width = 600;
+      const scale = payload.duration_sec > 0 ? width / payload.duration_sec : 1;
+      const hours = (payload.duration_sec / 3600).toFixed(1);
+      const row = (blocks, y, color) => (blocks || []).map(([start, end]) => {
+        const x = 20 + start * scale;
+        const w = Math.max(1, (end - start) * scale);
+        return `<rect x="${x}" y="${y}" width="${w}" height="18" fill="${color}"/>`;
+      }).join("");
+      if (!payload.expert) {
+        title.textContent = "Detected REM";
+        caption.textContent = "Dark blocks are the 30-second epochs called REM.";
+        compare.hidden = true;
+        svg.setAttribute("viewBox", "0 0 640 80");
+        svg.innerHTML = `
+          <rect x="20" y="28" width="${width}" height="18" fill="#f5f5f4"/>
+          ${row(payload.rem_blocks, 28, "#1e3a5f")}
+          <text x="20" y="64" font-size="12" fill="#57534e">0 h</text>
+          <text x="${20 + width}" y="64" text-anchor="end" font-size="12" fill="#57534e">${hours} h</text>`;
+        return;
+      }
+      title.textContent = "Detected REM and the expert score";
+      caption.innerHTML = `<span class="swatch model"></span>Model <span class="swatch expert"></span>Expert score`;
+      compare.hidden = false;
+      compare.textContent = comparisonSentence(payload);
+      svg.setAttribute("viewBox", "0 0 640 108");
+      svg.innerHTML = `
+        <rect x="20" y="16" width="${width}" height="18" fill="#f5f5f4"/>
+        <rect x="20" y="40" width="${width}" height="18" fill="#f5f5f4"/>
+        ${row(payload.rem_blocks, 16, "#1e3a5f")}
+        ${row(payload.expert.rem_blocks, 40, "#b45309")}
+        <text x="20" y="76" font-size="12" fill="#57534e">0 h</text>
+        <text x="${20 + width}" y="76" text-anchor="end" font-size="12" fill="#57534e">${hours} h</text>`;
+    }
+
+    function comparisonSentence(payload) {
+      const expert = payload.expert;
+      const opening = `The expert marked ${expert.rem_minutes} minutes of REM. The model called ${payload.rem_minutes} minutes.`;
+      const expertShare = expert.share_of_expert_also_detected;
+      const modelShare = expert.share_of_detected_also_expert;
+      if (expertShare === null || modelShare === null) {
+        return `${opening} Both call ${expert.agreed_minutes} minutes REM.`;
+      }
+      return `${opening} The ${expert.agreed_minutes} minutes both call REM are ${expertShare}% of the expert's REM and ${modelShare}% of the model's REM.`;
+    }
+
+    function drawChin(payload) {
+      const svg = document.getElementById("chin");
+      const times = payload.preview_times;
+      const values = payload.preview_uv;
+      if (!times.length) {
+        svg.innerHTML = `<text x="20" y="90" font-size="14" fill="#57534e">No REM stretch to draw.</text>`;
+        return;
+      }
+      const min = Math.min(...values, -(payload.threshold_uv || 0));
+      const max = Math.max(...values, payload.threshold_uv || 0);
+      const span = max - min || 1;
+      const x = (time) => 20 + ((time - times[0]) / (times[times.length - 1] - times[0] || 1)) * 600;
+      const y = (value) => 20 + (1 - (value - min) / span) * 130;
+      const path = values.map((value, index) => `${index === 0 ? "M" : "L"}${x(times[index]).toFixed(1)},${y(value).toFixed(1)}`).join(" ");
+      const threshold = payload.threshold_uv || 0;
+      svg.innerHTML = `
+        <path d="${path}" fill="none" stroke="#1e3a5f" stroke-width="1.4"/>
+        <line x1="20" y1="${y(threshold)}" x2="620" y2="${y(threshold)}" stroke="#9a3412" stroke-dasharray="4 3"/>
+        <line x1="20" y1="${y(-threshold)}" x2="620" y2="${y(-threshold)}" stroke="#9a3412" stroke-dasharray="4 3"/>`;
+    }
+  </script>
+</body>
+</html>

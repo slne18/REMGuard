@@ -1,0 +1,542 @@
+[
+  {
+    "recording_id": "brux1",
+    "epochs": 426,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "brux2",
+    "epochs": 1029,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins1",
+    "epochs": 906,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins2",
+    "epochs": 1674,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins3",
+    "epochs": 855,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins4",
+    "epochs": 718,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins5",
+    "epochs": 1720,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins6",
+    "epochs": 1057,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins7",
+    "epochs": 1483,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins8",
+    "epochs": 833,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "ins9",
+    "epochs": 1050,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n1",
+    "epochs": 1140,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n10",
+    "epochs": 852,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n11",
+    "epochs": 1051,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n12",
+    "epochs": 983,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n13",
+    "epochs": 952,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n14",
+    "epochs": 965,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n15",
+    "epochs": 976,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n16",
+    "epochs": 1019,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n2",
+    "epochs": 999,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n3",
+    "epochs": 999,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n4",
+    "epochs": 979,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n5",
+    "epochs": 1007,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n6",
+    "epochs": 1030,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n7",
+    "epochs": 973,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n8",
+    "epochs": 992,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "n9",
+    "epochs": 1020,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "narco1",
+    "epochs": 1095,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "narco2",
+    "epochs": 1149,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "narco3",
+    "epochs": 1517,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "narco4",
+    "epochs": 1016,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "narco5",
+    "epochs": 812,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle1",
+    "epochs": 950,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle10",
+    "epochs": 939,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle11",
+    "epochs": 1020,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle12",
+    "epochs": 1067,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle13",
+    "epochs": 965,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle14",
+    "epochs": 908,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle15",
+    "epochs": 1033,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle16",
+    "epochs": 1016,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle17",
+    "epochs": 871,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle18",
+    "epochs": 1065,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle19",
+    "epochs": 904,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle2",
+    "epochs": 975,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle20",
+    "epochs": 950,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle21",
+    "epochs": 1129,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle22",
+    "epochs": 1090,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle23",
+    "epochs": 946,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle24",
+    "epochs": 869,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle25",
+    "epochs": 1035,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle26",
+    "epochs": 974,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle27",
+    "epochs": 707,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle28",
+    "epochs": 1100,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle29",
+    "epochs": 884,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle3",
+    "epochs": 1097,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle30",
+    "epochs": 980,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle31",
+    "epochs": 890,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle32",
+    "epochs": 1079,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle33",
+    "epochs": 1026,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle34",
+    "epochs": 1002,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle35",
+    "epochs": 862,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle36",
+    "epochs": 995,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle37",
+    "epochs": 943,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle38",
+    "epochs": 875,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle39",
+    "epochs": 998,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle4",
+    "epochs": 1114,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle40",
+    "epochs": 1079,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle5",
+    "epochs": 1052,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle6",
+    "epochs": 810,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle7",
+    "epochs": 1103,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle8",
+    "epochs": 947,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "nfle9",
+    "epochs": 1102,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm1",
+    "epochs": 1316,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm10",
+    "epochs": 1003,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm2",
+    "epochs": 902,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm3",
+    "epochs": 840,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm4",
+    "epochs": 855,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm5",
+    "epochs": 822,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm6",
+    "epochs": 659,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm7",
+    "epochs": 990,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm8",
+    "epochs": 725,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "plm9",
+    "epochs": 1000,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd1",
+    "epochs": 692,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd10",
+    "epochs": 849,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd11",
+    "epochs": 848,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd12",
+    "epochs": 1055,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd13",
+    "epochs": 1043,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd14",
+    "epochs": 1109,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd15",
+    "epochs": 996,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd16",
+    "epochs": 1097,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd17",
+    "epochs": 1037,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd18",
+    "epochs": 916,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd19",
+    "epochs": 1005,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd2",
+    "epochs": 1194,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd20",
+    "epochs": 967,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd21",
+    "epochs": 983,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd22",
+    "epochs": 1085,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd3",
+    "epochs": 1210,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd4",
+    "epochs": 1351,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd5",
+    "epochs": 1158,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd6",
+    "epochs": 715,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd7",
+    "epochs": 1047,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd8",
+    "epochs": 1063,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "rbd9",
+    "epochs": 1182,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "sdb1",
+    "epochs": 765,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "sdb2",
+    "epochs": 1005,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "sdb3",
+    "epochs": 793,
+    "reason": "ok"
+  },
+  {
+    "recording_id": "sdb4",
+    "epochs": 1070,
+    "reason": "ok"
+  }
+]
